@@ -1,0 +1,6 @@
+{
+  "tests/test_get_trading_days.py": true,
+  "tests/test_tickDataSeries.py": true,
+  "tests/test_tuShareLiveFeed.py": true,
+  "tests/test_tuSharePollingThread.py": true
+}

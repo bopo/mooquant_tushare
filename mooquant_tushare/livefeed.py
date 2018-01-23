@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# Modified from MooQuant bitfinex and Xignite modules
+# Modified from MooQuant tushare and Xignite modules
 
 """
 .. moduleauthor:: Mikko Gozalo <mikgozalo@gmail.com>
@@ -34,7 +34,7 @@ from mooquant import observer
 from mooquant_tushare import api
 
 
-logger = logger.getLogger("bitfinex")
+logger = logger.getLogger("tushare")
 
 
 def utcnow():
@@ -48,6 +48,7 @@ class TradeBar(bar.Bar):
 
     def __init__(self, bardict):
         trade_dt = datetime.datetime.fromtimestamp(bardict['timestamp'])
+        
         if TradeBar.last_datetime is not None:
             if trade_dt <= TradeBar.last_datetime:
                 trade_dt = (
@@ -56,10 +57,11 @@ class TradeBar(bar.Bar):
                 )
 
         TradeBar.last_datetime = trade_dt
+
         self.__dateTime = trade_dt
         self.__tradeId = bardict['tid']
-        self.__price = float(bardict['price'])
         self.__amount = float(bardict['amount'])
+        self.__price = float(bardict['price'])
         self.__type = bardict['type']
 
     def __setstate__(self, state):
@@ -142,6 +144,7 @@ class PollingThread(threading.Thread):
 
     def run(self):
         logger.info("Thread started")
+        
         while not self.__stopped:
             self.__wait()
             if not self.__stopped:
@@ -149,6 +152,7 @@ class PollingThread(threading.Thread):
                     self.doCall()
                 except Exception as e:
                     logger.critical("Unhandled exception", exc_info=e)
+        
         logger.debug("Thread finished.")
 
     # Must return a non-naive datetime.
@@ -193,7 +197,9 @@ class TradesAPIThread(PollingThread):
                         self.__queue.put((
                             TradesAPIThread.ON_TRADE, bar
                         ))
+                
                 orders = api.get_orderbook(identifier)
+                
                 if len(orders['bids']) and len(orders['asks']):
                     best_ask = orders['asks'][0]
                     best_bid = orders['bids'][0]
