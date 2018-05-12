@@ -16,9 +16,11 @@
 .. moduleauthor:: ZackZK <silajoin@sina.com>
 """
 from unittest import TestCase
+
 from pandas import DataFrame
 
 from mooquant_tushare.barfeed import TuSharePollingThread
+
 
 class TestTuSharePollingThread(TestCase):
     def test_get_tushare_tick_data(self):
@@ -59,4 +61,3 @@ class TestTuSharePollingThread(TestCase):
         df.ix[0].price = '8.90'
         df.ix[0].time = '14:00:04'
         self.assertFalse(thread.valid_tick_data(stock_id, df.ix[0]))
-

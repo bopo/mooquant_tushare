@@ -20,14 +20,9 @@
 .. moduleauthor:: Mikko Gozalo <mikgozalo@gmail.com>
 """
 
+import tushare as ts
+
 import mooquant.logger
 from mooquant import broker
 
-
-btc_symbol = "btcusd"
-logger = mooquant.logger.getLogger("bitfinex")
-
-
-class BTCTraits(broker.InstrumentTraits):
-    def roundQuantity(self, quantity):
-        return round(quantity, 8)
+logger = mooquant.logger.getLogger("mooquant-tushare")

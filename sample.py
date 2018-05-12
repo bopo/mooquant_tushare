@@ -1,10 +1,7 @@
 from mooquant import strategy
 from mooquant.bar import Frequency
-from mooquant.technical import ma
-from mooquant.technical import cross
-
-from mooquant_bitfinex import livefeed
-from mooquant_bitfinex import broker
+from mooquant.technical import cross, ma
+from mooquant_bitfinex import broker, livefeed
 
 
 class Strategy(strategy.BaseStrategy):

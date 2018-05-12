@@ -15,10 +15,12 @@
 """
 .. moduleauthor:: ZackZK <silajoin@sina.com>
 """
+import datetime
 from unittest import TestCase
+
 import mock
 import pandas as pd
-import datetime
+
 from mooquant_tushare.barfeed import get_trading_days
 
 
@@ -90,4 +92,3 @@ class TestGet_trading_days(TestCase):
         self.assertEqual(2015, trading_days[6].year)
         self.assertEqual(8, trading_days[6].month)
         self.assertEqual(17, trading_days[6].day)
-

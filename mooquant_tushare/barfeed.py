@@ -17,22 +17,20 @@
 """
 
 
-from collections import deque
-import threading
 import datetime
 import queue
+import threading
 import time
+from collections import deque
 
 import pytz
-
-import mooquant.logger
 import tushare as ts
 
-from mooquant import barfeed, dataseries, resamplebase
+import mooquant.logger
+from mooquant import bar, barfeed, dataseries, resamplebase
 from mooquant.bar import Frequency
-from mooquant_tushare import bar
+from mooquant.provider.xignite.barfeed import utcnow
 from mooquant.utils import dt
-from mooquant.xignite.barfeed import utcnow
 
 logger = mooquant.logger.getLogger("tushare")
 
@@ -87,6 +85,7 @@ class TickDataSeries(object):
 
     def append(self, price, volume, amount, dateTime):
         assert(bar is not None)
+
         self.__priceDS.append(price)
         self.__volumeDS.append(volume)
         self.__amountDS.append(amount)

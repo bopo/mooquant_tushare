@@ -16,9 +16,9 @@
 .. moduleauthor:: ZackZK <silajoin@sina.com>
 """
 from unittest import TestCase
-from mooquant_tushare.barfeed import TickDataSeries
+
 from mooquant import bar
-from mooquant_tushare.barfeed import build_bar
+from mooquant_tushare.barfeed import TickDataSeries, build_bar
 
 
 class TestBuild_bar(TestCase):
@@ -57,6 +57,7 @@ class TestTickDataSeries(TestCase):
         ticks = TickDataSeries()
         ticks.append(1, 1 , 1, '14:55:00')
         ticks.reset()
+        
         self.assertEqual(len(ticks.getPriceDS()), 0)
         self.assertEqual(len(ticks.getAmountDS()), 0)
         self.assertEqual(len(ticks.getVolumeDS()), 0)
@@ -77,4 +78,3 @@ class TestTickDataSeries(TestCase):
         ticks.append(10.0, 1000, 999.9, '2015-12-17 14:55:00')
 
         self.assertFalse(ticks.empty())
-
