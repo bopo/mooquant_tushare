@@ -20,7 +20,7 @@ from unittest import TestCase
 from mooquant_tushare.livefeed import TickDataSeries, build_bar
 
 
-class TestBuild_bar(TestCase):
+class TestBuildBar(TestCase):
     def test_build_bar(self):
         ds = TickDataSeries()
         ds.append('1', '11', '111', '14:55:00')

@@ -22,7 +22,6 @@
 import datetime
 
 import mooquant.logger
-import tushare as ts
 from mooquant.utils import dt
 
 logger = mooquant.logger.getLogger("mooquant-tushare")
@@ -30,7 +29,3 @@ logger = mooquant.logger.getLogger("mooquant-tushare")
 
 def utcnow():
     return dt.as_utc(datetime.datetime.utcnow())
-
-
-if __name__ == '__main__':
-    ts.__version__

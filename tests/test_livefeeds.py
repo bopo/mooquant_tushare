@@ -24,9 +24,9 @@ from pandas import DataFrame
 from mooquant_tushare.livefeed import LiveFeed
 
 
-class TestTuShareLiveFeed(TestCase):
-    @mock.patch('mooquant_tushare.is_holiday')
-    @mock.patch('mooquant_tushare.ts')
+class TestLiveFeed(TestCase):
+    @mock.patch('mooquant_tushare.livefeed.ts.is_holiday')
+    @mock.patch('mooquant_tushare.livefeed.ts')
     def test__fill_today_bars(self, mock_tushare, mock_is_holiday):
         data_list = [['09:33:45', 9.10, 100, 2000, 0.01],
                      ['09:33:20', 9.20, 100, 2000, 0.01],
@@ -59,9 +59,9 @@ class TestTuShareLiveFeed(TestCase):
         bars = liveFeed.getNextBars()
         self.assertEqual(bars['000581'].getOpen(), 9.30)
 
-    @mock.patch('mooquant_tushare.is_holiday')
-    @mock.patch('mooquant_tushare.get_trading_days')
-    @mock.patch('mooquant_tushare.ts')
+    @mock.patch('mooquant_tushare.livefeed.ts.is_holiday')
+    @mock.patch('mooquant_tushare.livefeed.get_trading_days')
+    @mock.patch('mooquant_tushare.livefeed.ts')
     def test__fill_history_bars(self, mock_tushare, mock_days, mock_is_holiday):
         data_list = [['09:33:45', 9.10, 100, 2000, 0.01],
                      ['09:33:20', 9.20, 100, 2000, 0.01],

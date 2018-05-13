@@ -24,13 +24,14 @@ import pandas as pd
 from mooquant_tushare.livefeed import get_trading_days
 
 
-class TestGet_trading_days(TestCase):
-    @mock.patch('mooquant_tushare.ts')
+class TestTradingDays(TestCase):
+    @mock.patch('mooquant_tushare.livefeed.ts')
     def test_get_trading_days(self, mock_tushare):
         start_day = datetime.datetime(2015, 8, 8)
 
         data = [['2015-08-06', 10.0, 11.0, 10.5, 10.0], ['2015-08-07', 10.0, 11.0, 10.5, 10.0]]
         COLUMNS = ['date', 'open', 'high', 'close', 'low']
+
         df = pd.DataFrame(data, columns=COLUMNS)
         df = df.set_index('date')
 
@@ -46,12 +47,13 @@ class TestGet_trading_days(TestCase):
         self.assertEqual(8, trading_days[1].month)
         self.assertEqual(7, trading_days[1].day)
 
-    @mock.patch('mooquant_tushare.ts')
+    @mock.patch('mooquant_tushare.livefeed.ts')
     def test_get_trading_days_with_one_holiday(self, mock_tushare):
         start_day = datetime.datetime(2015, 8, 10)
 
         data = [['2015-08-06', 10.0, 11.0, 10.5, 10.0], ['2015-08-07', 10.0, 11.0, 10.5, 10.0]]
         COLUMNS = ['date', 'open', 'high', 'close', 'low']
+
         df = pd.DataFrame(data, columns=COLUMNS)
         df = df.set_index('date')
 
@@ -67,7 +69,7 @@ class TestGet_trading_days(TestCase):
         self.assertEqual(8, trading_days[1].month)
         self.assertEqual(7, trading_days[1].day)
 
-    @mock.patch('mooquant_tushare.ts')
+    @mock.patch('mooquant_tushare.livefeed.ts')
     def test_get_trading_days_with_two_holidays(self, mock_tushare):
         start_day = datetime.datetime(2015, 8, 18)
 
@@ -86,7 +88,6 @@ class TestGet_trading_days(TestCase):
         trading_days = get_trading_days(start_day, 7)
 
         self.assertEqual(7, len(trading_days))
-
         self.assertEqual(2015, trading_days[0].year)
         self.assertEqual(8, trading_days[0].month)
         self.assertEqual(7, trading_days[0].day)

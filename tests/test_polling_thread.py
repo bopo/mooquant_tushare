@@ -22,12 +22,7 @@ from pandas import DataFrame
 from mooquant_tushare.livefeed import PollingThread
 
 
-class TestTuSharePollingThread(TestCase):
-    def test_get_tushare_tick_data(self):
-        self.fail()
-
-
-class TestTuSharePollingThread(TestCase):
+class TestPollingThread(TestCase):
     def test_valid_tick_data_with_right_timestamp(self):
         stock_id = '000001'
         thread = PollingThread([stock_id])

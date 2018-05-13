@@ -13,7 +13,7 @@
 # limitations under the License.
 
 """
-.. moduleauthor:: ZackZK <silajoin@sina.com>
+.. moduleauthor:: BoPo <ibopo@126.com>
 """
 
 import datetime
@@ -24,12 +24,12 @@ from collections import deque
 
 import mooquant.logger
 import pytz
+import tushare as ts
 from mooquant import bar, barfeed, dataseries, resamplebase
 from mooquant.bar import Frequency
 from mooquant.utils import dt
-from tushare import is_holiday
 
-from mooquant_tushare.common import utcnow, ts
+from mooquant_tushare.common import utcnow
 
 logger = mooquant.logger.getLogger("tushare")
 
@@ -37,24 +37,6 @@ logger = mooquant.logger.getLogger("tushare")
 def to_market_datetime(dateTime):
     timezone = pytz.timezone('Asia/Shanghai')
     return dt.localize(dateTime, timezone)
-
-
-holiday = ['2015-01-01', '2015-01-02', '2015-02-18', '2015-02-19', '2015-02-20', '2015-02-23', '2015-02-24',
-           '2015-04-06', '2015-05-01', '2015-06-22', '2015-09-03', '2015-09-04', '2015-10-01', '2015-10-02',
-           '2015-10-05', '2015-10-06', '2015-10-07',
-           '2016-01-01', '2016-02-08', '2016-02-09', '2016-02-10', '2016-02-11', '2016-02-12', '2016-04-04',
-           '2016-05-02', '2016-06-09', '2016-06-10', '2016-09-15', '2016-09-16', '2016-10-03', '2016-10-04',
-           '2016-10-05', '2016-10-06', '2016-10-07']
-
-
-# def is_holiday(date):
-#     if isinstance(date, str):
-#         today = datetime.datetime.strptime(date, '%Y-%m-%d')
-#
-#     if today.isoweekday() in [6, 7] or date in holiday:
-#         return True
-#     else:
-#         return False
 
 
 class TickDataSeries(object):
@@ -299,7 +281,6 @@ class LiveFeed(barfeed.BaseBarFeed):
         for instrument in identifiers:
             self.registerInstrument(instrument)
 
-    ######################################################################
     # observer.Subject interface
     def start(self):
         if self.__thread.is_alive():
@@ -321,7 +302,6 @@ class LiveFeed(barfeed.BaseBarFeed):
     def peekDateTime(self):
         return None
 
-    ######################################################################
     # barfeed.BaseBarFeed interface
     def getCurrentDateTime(self):
         return utcnow()
@@ -341,12 +321,11 @@ class LiveFeed(barfeed.BaseBarFeed):
             pass
         return ret
 
-    ######################################################################
     # TuShareLiveFeed own interface
     def _fill_today_bars(self):
         today = datetime.date.today().isoformat()
 
-        if is_holiday(today):  # do nothing if holiday
+        if ts.is_holiday(today):  # do nothing if holiday
             return
         elif datetime.date.today().weekday() in [5, 0]:
             return
@@ -407,4 +386,3 @@ if __name__ == '__main__':
         bars = liveFeed.getNextBars()
         if bars is not None:
             print(bars['000581'].getHigh(), bars['000581'].getDateTime())
-            # test/
