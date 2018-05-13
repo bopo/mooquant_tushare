@@ -21,11 +21,11 @@ from unittest import TestCase
 import mock
 import pandas as pd
 
-from mooquant_tushare.barfeed import get_trading_days
+from mooquant_tushare.livefeed import get_trading_days
 
 
 class TestGet_trading_days(TestCase):
-    @mock.patch('mooquant_tushare.barfeed.ts')
+    @mock.patch('mooquant_tushare.ts')
     def test_get_trading_days(self, mock_tushare):
         start_day = datetime.datetime(2015, 8, 8)
 
@@ -46,7 +46,7 @@ class TestGet_trading_days(TestCase):
         self.assertEqual(8, trading_days[1].month)
         self.assertEqual(7, trading_days[1].day)
 
-    @mock.patch('mooquant_tushare.barfeed.ts')
+    @mock.patch('mooquant_tushare.ts')
     def test_get_trading_days_with_one_holiday(self, mock_tushare):
         start_day = datetime.datetime(2015, 8, 10)
 
@@ -67,7 +67,7 @@ class TestGet_trading_days(TestCase):
         self.assertEqual(8, trading_days[1].month)
         self.assertEqual(7, trading_days[1].day)
 
-    @mock.patch('mooquant_tushare.barfeed.ts')
+    @mock.patch('mooquant_tushare.ts')
     def test_get_trading_days_with_two_holidays(self, mock_tushare):
         start_day = datetime.datetime(2015, 8, 18)
 
@@ -75,7 +75,9 @@ class TestGet_trading_days(TestCase):
                 ['2015-08-11', 10.0, 11.0, 10.5, 10.0], ['2015-08-12', 10.0, 11.0, 10.5, 10.0],
                 ['2015-08-13', 10.0, 11.0, 10.5, 10.0], ['2015-08-14', 10.0, 11.0, 10.5, 10.0],
                 ['2015-08-17', 10.0, 11.0, 10.5, 10.0]]
+
         COLUMNS = ['date', 'open', 'high', 'close', 'low']
+
         df = pd.DataFrame(data, columns=COLUMNS)
         df = df.set_index('date')
 

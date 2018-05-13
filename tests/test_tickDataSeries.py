@@ -17,8 +17,7 @@
 """
 from unittest import TestCase
 
-from mooquant import bar
-from mooquant_tushare.barfeed import TickDataSeries, build_bar
+from mooquant_tushare.livefeed import TickDataSeries, build_bar
 
 
 class TestBuild_bar(TestCase):
@@ -55,9 +54,9 @@ class TestTickDataSeries(TestCase):
 
     def test_reset(self):
         ticks = TickDataSeries()
-        ticks.append(1, 1 , 1, '14:55:00')
+        ticks.append(1, 1, 1, '14:55:00')
         ticks.reset()
-        
+
         self.assertEqual(len(ticks.getPriceDS()), 0)
         self.assertEqual(len(ticks.getAmountDS()), 0)
         self.assertEqual(len(ticks.getVolumeDS()), 0)

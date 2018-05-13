@@ -18,15 +18,15 @@
 from unittest import TestCase
 
 import mock
+from mooquant import dataseries
 from pandas import DataFrame
 
-from mooquant import dataseries
-from mooquant_tushare.barfeed import TuShareLiveFeed
+from mooquant_tushare.livefeed import LiveFeed
 
 
 class TestTuShareLiveFeed(TestCase):
-    @mock.patch('mooquant_tushare.barfeed.is_holiday')
-    @mock.patch('mooquant_tushare.barfeed.ts')
+    @mock.patch('mooquant_tushare.is_holiday')
+    @mock.patch('mooquant_tushare.ts')
     def test__fill_today_bars(self, mock_tushare, mock_is_holiday):
         data_list = [['09:33:45', 9.10, 100, 2000, 0.01],
                      ['09:33:20', 9.20, 100, 2000, 0.01],
@@ -44,8 +44,8 @@ class TestTuShareLiveFeed(TestCase):
 
         mock_is_holiday.return_value = False
 
-        liveFeed = TuShareLiveFeed(['000581'], 60, dataseries.DEFAULT_MAX_LEN, 0)
-        #liveFeed.start()
+        liveFeed = LiveFeed(['000581'], 60, dataseries.DEFAULT_MAX_LEN, 0)
+        # liveFeed.start()
 
         bars = liveFeed.getNextBars()
         self.assertEqual(bars['000581'].getHigh(), 9.03)
@@ -59,9 +59,9 @@ class TestTuShareLiveFeed(TestCase):
         bars = liveFeed.getNextBars()
         self.assertEqual(bars['000581'].getOpen(), 9.30)
 
-    @mock.patch('mooquant_tushare.barfeed.is_holiday')
-    @mock.patch('mooquant_tushare.barfeed.get_trading_days')
-    @mock.patch('mooquant_tushare.barfeed.ts')
+    @mock.patch('mooquant_tushare.is_holiday')
+    @mock.patch('mooquant_tushare.get_trading_days')
+    @mock.patch('mooquant_tushare.ts')
     def test__fill_history_bars(self, mock_tushare, mock_days, mock_is_holiday):
         data_list = [['09:33:45', 9.10, 100, 2000, 0.01],
                      ['09:33:20', 9.20, 100, 2000, 0.01],
@@ -96,7 +96,7 @@ class TestTuShareLiveFeed(TestCase):
         day1 = datetime.datetime(2015, 8, 8)
         mock_days.return_value = [day1]
 
-        liveFeed = TuShareLiveFeed(['000581'], 60, dataseries.DEFAULT_MAX_LEN, 1)
+        liveFeed = LiveFeed(['000581'], 60, dataseries.DEFAULT_MAX_LEN, 1)
 
         bars = liveFeed.getNextBars()
         self.assertEqual(bars['000581'].getHigh(), 9.30)

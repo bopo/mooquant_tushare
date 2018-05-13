@@ -19,7 +19,7 @@ from unittest import TestCase
 
 from pandas import DataFrame
 
-from mooquant_tushare.barfeed import TuSharePollingThread
+from mooquant_tushare.livefeed import PollingThread
 
 
 class TestTuSharePollingThread(TestCase):
@@ -30,7 +30,7 @@ class TestTuSharePollingThread(TestCase):
 class TestTuSharePollingThread(TestCase):
     def test_valid_tick_data_with_right_timestamp(self):
         stock_id = '000001'
-        thread = TuSharePollingThread([stock_id])
+        thread = PollingThread([stock_id])
         data_list = [['10.00', '9.00', '1000', '2000', '14:00:01']]
         columns = ['pre_close', 'price', 'volume', 'amount', 'time']
         df = DataFrame(data_list, columns=columns)
@@ -45,7 +45,7 @@ class TestTuSharePollingThread(TestCase):
 
     def test_valid_tick_data_with_right_price(self):
         stock_id = '000001'
-        thread = TuSharePollingThread([stock_id])
+        thread = PollingThread([stock_id])
 
         data_list = [['10.00', '10.00', '1000', '2000', '14:00:01']]
         columns = ['pre_close', 'price', 'volume', 'amount', 'time']

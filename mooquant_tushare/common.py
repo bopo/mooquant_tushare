@@ -19,10 +19,18 @@
 """
 .. moduleauthor:: Mikko Gozalo <mikgozalo@gmail.com>
 """
-
-import tushare as ts
+import datetime
 
 import mooquant.logger
-from mooquant import broker
+import tushare as ts
+from mooquant.utils import dt
 
 logger = mooquant.logger.getLogger("mooquant-tushare")
+
+
+def utcnow():
+    return dt.as_utc(datetime.datetime.utcnow())
+
+
+if __name__ == '__main__':
+    ts.__version__
