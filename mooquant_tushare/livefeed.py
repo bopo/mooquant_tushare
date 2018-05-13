@@ -13,7 +13,7 @@
 # limitations under the License.
 
 """
-.. moduleauthor:: BoPo <ibopo@126.com>
+.. moduleauthor:: bopo.wang <ibopo@126.com>
 """
 
 import datetime

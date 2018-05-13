@@ -15,9 +15,8 @@
 # limitations under the License.
 #
 # Modified from MooQuant tushare and Xignite modules
-
 """
-.. moduleauthor:: Mikko Gozalo <mikgozalo@gmail.com>
+.. moduleauthor:: bopo.wang <ibopo@126.com>
 """
 import datetime
 
