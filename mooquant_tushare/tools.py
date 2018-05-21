@@ -22,10 +22,10 @@
 import datetime
 import os
 
-import mooquant.logger
 import tushare as ts
-from mooquant import bar
 
+import mooquant.logger
+from mooquant import bar
 from mooquant_tushare import barfeed
 
 
@@ -56,7 +56,13 @@ def download_daily_bars(instrument, year, csvFile):
         bars.to_csv(csvFile, encoding='utf-8', index=False)
 
 
-def build_feed(instruments, fromYear, toYear, storage, frequency=bar.Frequency.DAY, skipErrors=False):
+def build_feed(
+        instruments,
+        fromYear,
+        toYear,
+        storage,
+        frequency=bar.Frequency.DAY,
+        skipErrors=False):
     """Build and load a :class:`mooquant.barfeed.tusharefeed.Feed` using CSV files downloaded from Google Finance.
     CSV files are downloaded if they haven't been downloaded before.
 

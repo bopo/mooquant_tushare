@@ -17,10 +17,10 @@
 """
 from unittest import TestCase
 
-import mock
-from mooquant import dataseries
 from pandas import DataFrame
 
+import mock
+from mooquant import dataseries
 from mooquant_tushare.livefeed import LiveFeed
 
 
@@ -54,7 +54,9 @@ class TestLiveFeed(TestCase):
         bars = liveFeed.getNextBars()
         self.assertEqual(bars['000581'].getClose(), 9.40)
         # self.assertEqual(bars['000581'].getAmount(), 1110)
-        self.assertEqual(bars['000581'].getDateTime().strftime("%H:%M:%S"), "09:32:00")
+        self.assertEqual(
+            bars['000581'].getDateTime().strftime("%H:%M:%S"),
+            "09:32:00")
 
         bars = liveFeed.getNextBars()
         self.assertEqual(bars['000581'].getOpen(), 9.30)
@@ -62,7 +64,11 @@ class TestLiveFeed(TestCase):
     @mock.patch('mooquant_tushare.livefeed.ts.is_holiday')
     @mock.patch('mooquant_tushare.livefeed.get_trading_days')
     @mock.patch('mooquant_tushare.livefeed.ts')
-    def test__fill_history_bars(self, mock_tushare, mock_days, mock_is_holiday):
+    def test__fill_history_bars(
+            self,
+            mock_tushare,
+            mock_days,
+            mock_is_holiday):
         data_list = [['09:33:45', 9.10, 100, 2000, 0.01],
                      ['09:33:20', 9.20, 100, 2000, 0.01],
                      ['09:33:00', 9.30, 100, 2000, 0.01],

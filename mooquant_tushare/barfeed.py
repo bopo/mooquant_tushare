@@ -75,9 +75,18 @@ class RowParser(csvfeed.RowParser):
         adjClose = None
 
         if self.__sanitize:
-            open_, high, low, close = common.sanitize_ohlc(open_, high, low, close)
+            open_, high, low, close = common.sanitize_ohlc(
+                open_, high, low, close)
 
-        return bar.BasicBar(dateTime, open_, high, low, close, volume, adjClose, self.__frequency)
+        return bar.BasicBar(
+            dateTime,
+            open_,
+            high,
+            low,
+            close,
+            volume,
+            adjClose,
+            self.__frequency)
 
 
 class Feed(csvfeed.BarFeed):
@@ -100,7 +109,11 @@ class Feed(csvfeed.BarFeed):
     """
 
     # frequency == 频率
-    def __init__(self, frequency=bar.Frequency.DAY, timezone=None, maxLen=None):
+    def __init__(
+            self,
+            frequency=bar.Frequency.DAY,
+            timezone=None,
+            maxLen=None):
         if frequency not in [bar.Frequency.DAY]:
             raise Exception("Invalid frequency.")
 
@@ -131,5 +144,9 @@ class Feed(csvfeed.BarFeed):
         if timezone is None:
             timezone = self.__timezone
 
-        rowParser = RowParser(self.getDailyBarTime(), self.getFrequency(), timezone, self.__sanitizeBars)
+        rowParser = RowParser(
+            self.getDailyBarTime(),
+            self.getFrequency(),
+            timezone,
+            self.__sanitizeBars)
         super().addBarsFromCSV(instrument, path, rowParser)

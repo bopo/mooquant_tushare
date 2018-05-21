@@ -25,13 +25,13 @@ import threading
 import time
 from collections import deque
 
-import mooquant.logger
 import pytz
 import tushare as ts
+
+import mooquant.logger
 from mooquant import bar, barfeed, dataseries, resamplebase
 from mooquant.bar import Frequency
 from mooquant.utils import dt
-
 from mooquant_tushare.common import utcnow
 
 logger = mooquant.logger.getLogger("tushare")
@@ -116,11 +116,21 @@ def build_bar(dateTime, ds):
     volume = sum(int(v) for v in volumes)
     amount = sum(float(a) for a in amounts)
 
-    return bar.BasicBar(dateTime, open_, high, low, close, volume, None, Frequency.DAY, amount)
+    return bar.BasicBar(
+        dateTime,
+        open_,
+        high,
+        low,
+        close,
+        volume,
+        None,
+        Frequency.DAY,
+        amount)
 
 
 class PollingThread(threading.Thread):
-    # Not using xignite polling thread is because two underscores functions can't be override, e.g. __wait()
+    # Not using xignite polling thread is because two underscores functions
+    # can't be override, e.g. __wait()
 
     TUSHARE_INQUERY_PERIOD = 3  # tushare read period, default is 3s
 
@@ -137,7 +147,8 @@ class PollingThread(threading.Thread):
         self.__stopped = False
 
     def __wait(self):
-        # first reset ticks info in one cycle, maybe we need save it if NO quotation in this period
+        # first reset ticks info in one cycle, maybe we need save it if NO
+        # quotation in this period
         for identifier in self._identifiers:
             self._tickDSDict[identifier].reset()
 
@@ -161,7 +172,8 @@ class PollingThread(threading.Thread):
         else:
             return False
 
-        return float(tick_info.pre_close) * 0.9 <= float(tick_info.price) <= float(tick_info.pre_close) * 1.1
+        return float(tick_info.pre_close) * \
+            0.9 <= float(tick_info.price) <= float(tick_info.pre_close) * 1.1
 
     def get_tushare_tick_data(self):
         try:
@@ -171,9 +183,10 @@ class PollingThread(threading.Thread):
                 tick_info = df.ix[index]
 
                 if self.valid_tick_data(identifier, tick_info):
-                    # tushare use unicode type, another way is convert it to int/float here. refer to build_bar
-                    self._tickDSDict[identifier].append(tick_info.price, tick_info.volume, tick_info.amount,
-                                                        tick_info.time)
+                    # tushare use unicode type, another way is convert it to
+                    # int/float here. refer to build_bar
+                    self._tickDSDict[identifier].append(
+                        tick_info.price, tick_info.volume, tick_info.amount, tick_info.time)
         except Exception as e:
             logger.error("Tushare polling exception", exc_info=e)
 
@@ -213,7 +226,8 @@ class LiveFeedThread(PollingThread):
         self.__updateNextBarClose()
 
     def __updateNextBarClose(self):
-        self.__nextBarClose = resamplebase.build_range(utcnow(), self.__frequency).getEnding()
+        self.__nextBarClose = resamplebase.build_range(
+            utcnow(), self.__frequency).getEnding()
 
     def getNextCallDateTime(self):
         return self.__nextBarClose
@@ -226,7 +240,8 @@ class LiveFeedThread(PollingThread):
         for identifier in self._identifiers:
             try:
                 if not self._tickDSDict[identifier].empty():
-                    bar_dict[identifier] = build_bar(to_market_datetime(endDateTime), self._tickDSDict[identifier])
+                    bar_dict[identifier] = build_bar(
+                        to_market_datetime(endDateTime), self._tickDSDict[identifier])
             except Exception as e:
                 logger.error(e)
 
@@ -241,10 +256,18 @@ def get_bar_list(df, frequency, date=None):
     end_time = df.ix[0].time
     if date is None:
         date = datetime.datetime.now()
-    slice_start_time = to_market_datetime(datetime.datetime(date.year, date.month, date.day, 9, 30, 0))
+    slice_start_time = to_market_datetime(
+        datetime.datetime(
+            date.year,
+            date.month,
+            date.day,
+            9,
+            30,
+            0))
 
     while slice_start_time.strftime("%H:%M:%S") < end_time:
-        slice_end_time = slice_start_time + datetime.timedelta(seconds=frequency)
+        slice_end_time = slice_start_time + \
+            datetime.timedelta(seconds=frequency)
 
         ticks_slice = df.ix[(df.time < slice_end_time.strftime("%H:%M:%S")) &
                             (df.time >= slice_start_time.strftime("%H:%M:%S"))]
@@ -269,7 +292,12 @@ def get_bar_list(df, frequency, date=None):
 class LiveFeed(barfeed.BaseBarFeed):
     QUEUE_TIMEOUT = 0.01
 
-    def __init__(self, identifiers, frequency, maxLen=dataseries.DEFAULT_MAX_LEN, replayDays=-1):
+    def __init__(
+            self,
+            identifiers,
+            frequency,
+            maxLen=dataseries.DEFAULT_MAX_LEN,
+            replayDays=-1):
         barfeed.BaseBarFeed.__init__(self, frequency, maxLen)
         if not isinstance(identifiers, list):
             raise Exception("identifiers must be a list")
@@ -278,7 +306,8 @@ class LiveFeed(barfeed.BaseBarFeed):
         self.__frequency = frequency
         self.__queue = queue.Queue()
 
-        self.__fill_today_history_bars(replayDays)  # should run before polling thread start
+        # should run before polling thread start
+        self.__fill_today_history_bars(replayDays)
 
         self.__thread = LiveFeedThread(self.__queue, identifiers, frequency)
         for instrument in identifiers:
@@ -315,11 +344,14 @@ class LiveFeed(barfeed.BaseBarFeed):
     def getNextBars(self):
         ret = None
         try:
-            eventType, eventData = self.__queue.get(True, LiveFeed.QUEUE_TIMEOUT)
+            eventType, eventData = self.__queue.get(
+                True, LiveFeed.QUEUE_TIMEOUT)
             if eventType == LiveFeedThread.ON_BARS:
                 ret = eventData
             else:
-                logger.error("Invalid event received: %s - %s" % (eventType, eventData))
+                logger.error(
+                    "Invalid event received: %s - %s" %
+                    (eventType, eventData))
         except queue.Empty:
             pass
         return ret
@@ -341,7 +373,8 @@ class LiveFeed(barfeed.BaseBarFeed):
         for identifier in self.__identifiers:
             try:
                 df = ts.get_today_ticks(identifier)
-                today_bars[identifier] = get_bar_list(df, self.__frequency, None)
+                today_bars[identifier] = get_bar_list(
+                    df, self.__frequency, None)
             except Exception as e:
                 logger.error(e)
 
@@ -382,7 +415,11 @@ class LiveFeed(barfeed.BaseBarFeed):
 
 
 if __name__ == '__main__':
-    liveFeed = LiveFeed(['000581'], Frequency.MINUTE, dataseries.DEFAULT_MAX_LEN, 2)
+    liveFeed = LiveFeed(
+        ['000581'],
+        Frequency.MINUTE,
+        dataseries.DEFAULT_MAX_LEN,
+        2)
     liveFeed.start()
 
     while not liveFeed.eof():

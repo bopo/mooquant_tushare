@@ -18,9 +18,9 @@
 import datetime
 from unittest import TestCase
 
-import mock
 import pandas as pd
 
+import mock
 from mooquant_tushare.livefeed import get_trading_days
 
 
@@ -29,7 +29,8 @@ class TestTradingDays(TestCase):
     def test_get_trading_days(self, mock_tushare):
         start_day = datetime.datetime(2015, 8, 8)
 
-        data = [['2015-08-06', 10.0, 11.0, 10.5, 10.0], ['2015-08-07', 10.0, 11.0, 10.5, 10.0]]
+        data = [['2015-08-06', 10.0, 11.0, 10.5, 10.0],
+                ['2015-08-07', 10.0, 11.0, 10.5, 10.0]]
         COLUMNS = ['date', 'open', 'high', 'close', 'low']
 
         df = pd.DataFrame(data, columns=COLUMNS)
@@ -51,7 +52,8 @@ class TestTradingDays(TestCase):
     def test_get_trading_days_with_one_holiday(self, mock_tushare):
         start_day = datetime.datetime(2015, 8, 10)
 
-        data = [['2015-08-06', 10.0, 11.0, 10.5, 10.0], ['2015-08-07', 10.0, 11.0, 10.5, 10.0]]
+        data = [['2015-08-06', 10.0, 11.0, 10.5, 10.0],
+                ['2015-08-07', 10.0, 11.0, 10.5, 10.0]]
         COLUMNS = ['date', 'open', 'high', 'close', 'low']
 
         df = pd.DataFrame(data, columns=COLUMNS)

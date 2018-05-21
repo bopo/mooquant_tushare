@@ -13,9 +13,9 @@ from mooquant_tushare import __version__
 with open('README.md') as readme_file:
     readme = readme_file.read()
 
-requirements = ['mooquant',]
-test_requirements = ['mooquant', 'pytest',]
-setup_requirements = ['mooquant',]
+requirements = ['mooquant', ]
+test_requirements = ['mooquant', 'pytest', ]
+setup_requirements = ['mooquant', ]
 
 setup(
     name='mooquant_tushare',
@@ -25,7 +25,7 @@ setup(
     author="bopo.wang",
     author_email='ibopo@126.com',
     url='https://github.com/bopo/mooquant_tushare',
-    packages=find_packages(include=['mooquant_tushare','mooquant_tushare.*']),
+    packages=find_packages(include=['mooquant_tushare', 'mooquant_tushare.*']),
     include_package_data=True,
     install_requires=requirements,
     license="MIT license",

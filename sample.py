@@ -3,7 +3,6 @@
 from mooquant import strategy
 from mooquant.analyzer import sharpe
 from mooquant.technical import ma
-
 from mooquant_tushare.tools import build_feed
 
 
@@ -44,7 +43,8 @@ class MyStrategy(strategy.BacktestingStrategy):
         # bar.getTyoicalPrice = (bar.getHigh() + bar.getLow() + bar.getClose())/ 3.0
         bar = bars[self.__instrument]
 
-        # If a position was not opened, check if we should enter a long position.
+        # If a position was not opened, check if we should enter a long
+        # position.
         if self.__position is None:
             if bar.getPrice() > self.__sma[-1]:
                 # 开多头.
